@@ -1,4 +1,4 @@
-Run Instructions
+# Run Instructions
 
 1. python mnist_cnn_one_iteration.py
 
