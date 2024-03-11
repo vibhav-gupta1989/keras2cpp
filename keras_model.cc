@@ -41,13 +41,34 @@ void keras::LayerConv2D::load_weights(std::ifstream &fin) {
   string tmp_str = "";
   float tmp_float;
   bool skip = false;
-  fin >> m_kernels_cnt >> m_depth >> m_rows >> m_cols >> m_border_mode;
+  fin >> m_rows >> m_cols >> m_depth >> m_kernels_cnt >>  m_border_mode;
   if (m_border_mode == "[") { m_border_mode = "valid"; skip = true; }
 
   cout << "LayerConv2D " << m_kernels_cnt << "x" << m_depth << "x" << m_rows <<
               "x" << m_cols << " border_mode " << m_border_mode << endl;
   // reading kernel weights
-  for(int k = 0; k < m_kernels_cnt; ++k) {
+
+  for(int i=0; i<m_rows; i++){
+    vector<vector<vector<float>>> cols;
+    for(int j=0; j<m_cols; j++){
+      vector<vector<float>>depths;
+      for(int d=0; d<m_depth; d++){
+        fin >> tmp_char;
+        vector<float>filters;
+        for(int f=0; f<m_kernels_cnt; f++){
+          fin >> tmp_float;
+          filters.push_back(tmp_float);
+        }
+        fin >> tmp_char;
+        depths.push_back(filters);
+      }
+      cols.push_back(depths);
+    }
+    rows.push_back(cols);
+  }
+
+
+  /*for(int k = 0; k < m_kernels_cnt; ++k) {
     vector<vector<vector<float> > > tmp_depths;
     for(int d = 0; d < m_depth; ++d) {
       vector<vector<float> > tmp_single_depth;
@@ -66,17 +87,18 @@ void keras::LayerConv2D::load_weights(std::ifstream &fin) {
     }
     m_kernels.push_back(tmp_depths);
   }
+  */
   // reading kernel biases
-  fin >> tmp_char; // for '['
+  /*fin >> tmp_char; // for '['
   cout << tmp_char << endl;
   cout << m_kernels_cnt << endl;
   cout << m_cols << endl;
-  for(int k = 0; k < m_cols; ++k) {
+  for(int k = 0; k < m_kernels_cnt; ++k) {
     fin >> tmp_float;
     cout << tmp_float << endl;
     m_bias.push_back(tmp_float);
   }
-  fin >> tmp_char; // for ']'
+  fin >> tmp_char; // for ']'*/
 }
 
 void keras::LayerActivation::load_weights(std::ifstream &fin) {
@@ -300,7 +322,44 @@ std::vector< std::vector<float> > keras::conv_single_depth_same(
 
 keras::DataChunk* keras::LayerConv2D::compute_output(keras::DataChunk* dc) {
 
-  unsigned int st_x = (m_kernels[0][0].size()-1) >> 1;
+  auto const & im = dc->get_3d();
+  vector<vector<vector<float>>> y_ret;
+
+  for(int i=0; i<im[0].size(); i++){
+    vector<vector<float>>c;
+    for(int j=0; j<im[0][0].size(); j++){
+      vector<float>f;
+      for(int k=0; k<m_kernels_cnt; k++){
+        f.push_back(0);
+      }
+      c.push_back(f);
+    }
+    y_ret.push_back(c);
+  }
+
+  float output;
+
+  for(int i=0; i<im[0].size(); i++){
+    for(int j=0; j<im[0][0].size(); j++){
+      for(int k=0; k<m_kernels_cnt; k++){
+        // Set y_ret[i][j][k]
+
+        output = 0;
+        for(int l=i-(m_rows/2), n=0; l<=i+(m_rows/2); l++, n++){
+          for(int m=j-(m_cols/2), o=0; m<=j+(m_cols/2); m++, o++){
+            if(l < 0 || l >= im[0].size() || m < 0 || m >= im[0][0].size())
+              continue;
+
+            output += im[0][l][m] * rows[n][o][0][k];
+          } 
+        }
+
+        y_ret[i][j][k] = output;
+      }
+    }
+  }
+
+  /*unsigned int st_x = (m_kernels[0][0].size()-1) >> 1;
   unsigned int st_y = (m_kernels[0][0][0].size()-1) >> 1;
   vector< vector< vector<float> > > y_ret;
   auto const & im = dc->get_3d();
@@ -330,12 +389,13 @@ keras::DataChunk* keras::LayerConv2D::compute_output(keras::DataChunk* dc) {
       }
     }
 
+
     for(unsigned int x = 0; x < y_ret[0].size(); ++x) {
       for(unsigned int y = 0; y < y_ret[0][0].size(); ++y) {
         y_ret[j][x][y] += m_bias[j];
       }
     }
-  }
+  }*/
 
   keras::DataChunk *out = new keras::DataChunk2D();
   out->set_data(y_ret);

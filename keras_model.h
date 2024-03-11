@@ -163,7 +163,7 @@ public:
 
   void load_weights(std::ifstream &fin);
   keras::DataChunk* compute_output(keras::DataChunk*);
-  std::vector<std::vector<std::vector<std::vector<float> > > > m_kernels; // kernel, depth, rows, cols
+  std::vector<std::vector<std::vector<std::vector<float> > > > rows; // kernel, depth, rows, cols
   std::vector<float> m_bias; // kernel
 
   virtual unsigned int get_input_rows() const { return m_rows; }

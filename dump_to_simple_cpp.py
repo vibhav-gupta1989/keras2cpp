@@ -54,12 +54,13 @@ with open(output, 'w') as fout:
             if verbose:
                 print(W.shape)
             
+            #W = W.reshape(W.shape[3], W.shape[2], W.shape[0], W.shape[1])
             fout.write(str(W.shape[0]) + ' ' + str(W.shape[1]) + ' ' + str(W.shape[2]) + ' ' + str(W.shape[3]) + ' ' + l.padding + '\n')
             for i in range(W.shape[0]):
                 for j in range(W.shape[1]):
                     for k in range(W.shape[2]):
                         fout.write(str(W[i,j,k]) + '\n')
-            fout.write(str(l.get_weights()[1]) + '\n')
+            #fout.write(str(l.get_weights()[1]) + '\n')
 
         if 'activation' in l.name:
             # fout.write(l['config']['activation'] + '\n')

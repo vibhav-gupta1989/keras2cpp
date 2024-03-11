@@ -11,7 +11,7 @@ np.random.seed(1337)  # for reproducibility
 from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Convolution2D, MaxPooling2D
+from keras.layers import Convolution2D, MaxPooling2D, Conv2D
 from keras.utils import to_categorical
 
 batch_size = 128
@@ -30,8 +30,8 @@ nb_conv = 3
 # the data, shuffled and split between train and test sets
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
-X_train = X_train.reshape(X_train.shape[0], 1, img_rows, img_cols)
-X_test = X_test.reshape(X_test.shape[0], 1, img_rows, img_cols)
+X_train = X_train.reshape(X_train.shape[0], img_rows, img_cols, 1)
+X_test = X_test.reshape(X_test.shape[0], img_rows, img_cols, 1)
 X_train = X_train.astype('float32')
 X_test = X_test.astype('float32')
 X_train /= 255
@@ -46,13 +46,15 @@ Y_test = to_categorical(y_test, nb_classes)
 
 model = Sequential()
 
-#model.add(Convolution2D(nb_filters, nb_conv, nb_conv, padding='same',
-#                        input_shape=(1, img_rows, img_cols)))
-#model.add(Activation('relu'))
+model.add(Conv2D(nb_filters, nb_conv, padding='same',
+                        input_shape=(img_rows, img_cols, 1), use_bias=False))
+#model.add(Conv2D(nb_filters, nb_conv, padding = 'same',
+#                 input_shape = (1, img_rows, img_cols )))
+model.add(Activation('relu'))
 #model.add(Convolution2D(nb_filters, nb_conv, nb_conv, padding='same'))
-#model.add(Activation('relu'))
+model.add(Activation('relu'))
 # model.add(MaxPooling2D(pool_size=(nb_pool, nb_pool)))
-# model.add(Dropout(0.25))
+model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(6))
 model.add(Activation('relu'))
@@ -62,6 +64,8 @@ model.add(Activation('softmax'))
 
 model.compile(loss='categorical_crossentropy',
               optimizer='adadelta')
+
+model.summary()
 
 model.fit(X_train, Y_train, batch_size=batch_size, epochs=nb_epoch,
           verbose=1, validation_data=(X_test, Y_test))
@@ -73,11 +77,11 @@ model.fit(X_train, Y_train, batch_size=batch_size, epochs=nb_epoch,
 model.save("my_model.keras")
 
 # store one sample in text file
-with open("./sample_mnist.dat", "w") as fin:
-    fin.write("1 28 28\n")
-    a = X_train[0,0]
-    for b in a:
-        fin.write(str(b)+'\n')
+#with open("./sample_mnist.dat", "w") as fin:
+#    fin.write("1 28 28\n")
+#    a = X_train[0,0]
+#    for b in a:
+#        fin.write(str(b)+'\n')
 
 # get prediction on saved sample
 # c++ output should be the same ;)
