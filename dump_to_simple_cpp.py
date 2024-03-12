@@ -60,7 +60,7 @@ with open(output, 'w') as fout:
                 for j in range(W.shape[1]):
                     for k in range(W.shape[2]):
                         fout.write(str(W[i,j,k]) + '\n')
-            #fout.write(str(l.get_weights()[1]) + '\n')
+            fout.write(str(l.get_weights()[1]) + '\n')
 
         if 'activation' in l.name:
             # fout.write(l['config']['activation'] + '\n')

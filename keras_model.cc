@@ -67,6 +67,15 @@ void keras::LayerConv2D::load_weights(std::ifstream &fin) {
     rows.push_back(cols);
   }
 
+  // reading kernel biases
+  fin >> tmp_char; // for '['
+  for(int k = 0; k < m_kernels_cnt; ++k) {
+    fin >> tmp_float;
+    cout << tmp_float << endl;
+    m_bias.push_back(tmp_float);
+  }
+  fin >> tmp_char; // for ']'
+
 
   /*for(int k = 0; k < m_kernels_cnt; ++k) {
     vector<vector<vector<float> > > tmp_depths;
@@ -368,7 +377,7 @@ keras::DataChunk* keras::LayerConv2D::compute_output(keras::DataChunk* dc) {
           } 
         }
 
-        y_ret[i][j][k] = output;
+        y_ret[i][j][k] = output + m_bias[k];
       }
     }
   }

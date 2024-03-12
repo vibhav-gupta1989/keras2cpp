@@ -47,7 +47,7 @@ Y_test = to_categorical(y_test, nb_classes)
 model = Sequential()
 
 model.add(Conv2D(nb_filters, nb_conv, padding='same',
-                        input_shape=(img_rows, img_cols, 1), use_bias=False))
+                        input_shape=(img_rows, img_cols, 1)))
 #model.add(Conv2D(nb_filters, nb_conv, padding = 'same',
 #                 input_shape = (1, img_rows, img_cols )))
 model.add(Activation('relu'))
