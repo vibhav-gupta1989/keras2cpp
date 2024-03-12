@@ -21,17 +21,34 @@ std::vector<float> keras::read_1d_array(std::ifstream &fin, int cols) {
 }
 
 void keras::DataChunk2D::read_from_file(const std::string &fname) {
+  char tmp_char;
+  float tmp_float;
   ifstream fin(fname.c_str());
-  fin >> m_depth >> m_rows >> m_cols;
+  fin  >> m_rows >> m_cols >> m_depth;
 
-  for(int d = 0; d < m_depth; ++d) {
+  for(int i=0; i<m_rows; i++){
+    fin >> tmp_char;
+    vector<vector<float>>c;
+    for(int j=0; j<m_cols; j++){
+      vector<float>d;
+      for(int k=0; k<m_depth; k++){
+        fin >> tmp_float;
+        d.push_back(tmp_float);
+      }
+      c.push_back(d);
+    }
+    fin >> tmp_char;
+    data.push_back(c);
+  }
+
+  /*for(int d = 0; d < m_depth; ++d) {
     vector<vector<float> > tmp_single_depth;
     for(int r = 0; r < m_rows; ++r) {
       vector<float> tmp_row = keras::read_1d_array(fin, m_cols);
       tmp_single_depth.push_back(tmp_row);
     }
     data.push_back(tmp_single_depth);
-  }
+  }*/
   fin.close();
 }
 
@@ -355,9 +372,9 @@ keras::DataChunk* keras::LayerConv2D::compute_output(keras::DataChunk* dc) {
     colOffset = m_cols/2;
   }
   
-  for(int i=rowOffset; i<im[0].size()-rowOffset; i++){
+  for(int i=rowOffset; i<im.size()-rowOffset; i++){
     vector<vector<float>>c;
-    for(int j=colOffset; j<im[0][0].size()-colOffset; j++){
+    for(int j=colOffset; j<im[0].size()-colOffset; j++){
       vector<float>f;
       for(int k=0; k<m_kernels_cnt; k++){
         f.push_back(0);
@@ -372,34 +389,33 @@ keras::DataChunk* keras::LayerConv2D::compute_output(keras::DataChunk* dc) {
   for(int i=0; i<y_ret.size(); i++){
     for(int j=0; j<y_ret[0].size(); j++){
       for(int k=0; k<m_kernels_cnt; k++){
-        // Set y_ret[i][j][k]
+        output = 0;
+        for(int dd=0; dd < m_depth; dd++){
 
-        if(m_border_mode == "same"){
-          output = 0;
-          for(int l=i-(m_rows/2), n=0; l<=i+(m_rows/2); l++, n++){
-            for(int m=j-(m_cols/2), o=0; m<=j+(m_cols/2); m++, o++){
-              if(l < 0 || l >= im[0].size() || m < 0 || m >= im[0][0].size())
-                continue;
+          if(m_border_mode == "same"){
+            for(int l=i-(m_rows/2), n=0; l<=i+(m_rows/2); l++, n++){
+              for(int m=j-(m_cols/2), o=0; m<=j+(m_cols/2); m++, o++){
+                if(l < 0 || l >= im.size() || m < 0 || m >= im[0].size())
+                  continue;
 
-              output += im[0][l][m] * rows[n][o][0][k];
-            } 
-          }
-          y_ret[i][j][k] = output + m_bias[k];
-        }
-
-        else{
-          int row_id, col_id;
-          output = 0;
-          row_id = i + (m_rows/2);
-          col_id = j + (m_cols/2);
-
-          for(int l=row_id-(m_rows/2), n=0; l<=row_id+(m_rows/2); l++, n++){
-            for(int m=col_id-(m_cols/2), o=0; m<=col_id+(m_cols/2); m++, o++){
-              output += im[0][l][m] * rows[n][o][0][k]; 
+                output += im[l][m][dd] * rows[n][o][dd][k];
+              } 
             }
           }
-          y_ret[i][j][k] = output + m_bias[k];
+
+          else{
+            int row_id, col_id;
+            row_id = i + (m_rows/2);
+            col_id = j + (m_cols/2);
+
+            for(int l=row_id-(m_rows/2), n=0; l<=row_id+(m_rows/2); l++, n++){
+              for(int m=col_id-(m_cols/2), o=0; m<=col_id+(m_cols/2); m++, o++){
+                output += im[l][m][dd] * rows[n][o][dd][k]; 
+              }
+            }
+          }
         }
+        y_ret[i][j][k] = output + m_bias[k];
       }
     }
   }
