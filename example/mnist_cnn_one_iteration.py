@@ -53,7 +53,7 @@ model.add(Conv2D(nb_filters, nb_conv, padding='same',
 model.add(Activation('relu'))
 #model.add(Convolution2D(nb_filters, nb_conv, nb_conv, padding='same'))
 model.add(Activation('relu'))
-# model.add(MaxPooling2D(pool_size=(nb_pool, nb_pool)))
+model.add(MaxPooling2D(pool_size=(nb_pool, nb_pool)))
 model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(6))

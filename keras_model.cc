@@ -166,28 +166,42 @@ keras::DataChunk* keras::LayerFlatten::compute_output(keras::DataChunk* dc) {
 keras::DataChunk* keras::LayerMaxPooling::compute_output(keras::DataChunk* dc) {
   vector<vector<vector<float> > > im = dc->get_3d();
   vector<vector<vector<float> > > y_ret;
-  for(unsigned int i = 0; i < im.size(); ++i) {
+
+  for(int i=0; i<im.size()/m_pool_x; i++){
+    vector<vector<float>>c;
+    for(int j=0; j<im[0].size()/m_pool_y; j++){
+      vector<float>f;
+      for(int k=0; k<im[0][0].size(); k++){
+        f.push_back(0);
+      }
+      c.push_back(f);
+    }
+    y_ret.push_back(c);
+  }
+
+  /*for(unsigned int i = 0; i < im.size(); ++i) {
     vector<vector<float> > tmp_y;
     for(unsigned int j = 0; j < (unsigned int)(im[0].size()/m_pool_x); ++j) {
       tmp_y.push_back(vector<float>((int)(im[0][0].size()/m_pool_y), 0.0));
     }
     y_ret.push_back(tmp_y);
-  }
-  for(unsigned int d = 0; d < y_ret.size(); ++d) {
-    for(unsigned int x = 0; x < y_ret[0].size(); ++x) {
+  }*/
+  
+  for(unsigned int d = 0; d < y_ret[0][0].size(); ++d) {
+    for(unsigned int x = 0; x < y_ret.size(); ++x) {
       unsigned int start_x = x*m_pool_x;
       unsigned int end_x = start_x + m_pool_x;
-      for(unsigned int y = 0; y < y_ret[0][0].size(); ++y) {
+      for(unsigned int y = 0; y < y_ret[0].size(); ++y) {
         unsigned int start_y = y*m_pool_y;
         unsigned int end_y = start_y + m_pool_y;
 
         vector<float> values;
         for(unsigned int i = start_x; i < end_x; ++i) {
           for(unsigned int j = start_y; j < end_y; ++j) {
-            values.push_back(im[d][i][j]);
+            values.push_back(im[i][j][d]);
           }
         }
-        y_ret[d][x][y] = *max_element(values.begin(), values.end());
+        y_ret[x][y][d] = *max_element(values.begin(), values.end());
       }
     }
   }

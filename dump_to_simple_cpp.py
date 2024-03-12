@@ -16,7 +16,7 @@ parser.add_argument('-v', '--verbose', help="Verbose", required=False)
 architecture = "example/my_nn_arch.json";
 weights = "example/my_nn_weights.h5";
 output = "example/dumped.nnet";
-verbose = False;
+verbose = True;
 
 print('Read architecture from', architecture)
 print('Read weights from', weights)
@@ -70,9 +70,10 @@ with open(output, 'w') as fout:
                 fout.write('relu\n')
             else:
                 fout.write('softmax')
-        if 'MaxPooling2D' in l.name:
+        if 'max_pooling' in l.name:
             fout.write('layer ' + str(ind) + ' ' + 'MaxPooling2D' + '\n')
-            fout.write(str(l['config']['pool_size'][0]) + ' ' + str(l['config']['pool_size'][1]) + '\n')
+            #fout.write("2 2\n")
+            fout.write(str(l.pool_size[0]) + ' ' + str(l.pool_size[1]) + '\n')
         #if l['class_name'] == 'Flatten':
         #    print l['config']['name']
         if 'dense' in l.name:
