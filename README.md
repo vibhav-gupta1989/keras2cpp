@@ -2,6 +2,7 @@
 
 Step 1: Create and train a model in Python on the mnist dataset and run the prediction on a sample image.
 ```
+cd example
 python mnist_cnn_one_iteration.py
 ```
 
