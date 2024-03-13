@@ -30,6 +30,10 @@ nb_conv = 3
 # the data, shuffled and split between train and test sets
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
+X_train_original = X_train
+X_train_original = X_train_original.astype('float32')
+X_train_original /= 255
+
 X_train = X_train.reshape(X_train.shape[0], img_rows, img_cols, 1)
 X_test = X_test.reshape(X_test.shape[0], img_rows, img_cols, 1)
 X_train = X_train.astype('float32')
@@ -51,7 +55,7 @@ model.add(Conv2D(nb_filters, nb_conv, padding='same',
 #model.add(Conv2D(nb_filters, nb_conv, padding = 'same',
 #                 input_shape = (1, img_rows, img_cols )))
 model.add(Activation('relu'))
-model.add(Conv2D(nb_filters, nb_conv, padding='valid'))
+model.add(Conv2D(nb_filters, nb_conv, padding='same'))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(nb_pool, nb_pool)))
 model.add(Dropout(0.25))
@@ -77,16 +81,17 @@ model.fit(X_train, Y_train, batch_size=batch_size, epochs=nb_epoch,
 model.save("my_model.keras")
 
 # store one sample in text file
-#with open("./sample_mnist.dat", "w") as fin:
-#    fin.write("1 28 28\n")
-#    a = X_train[0,0]
-#    for b in a:
-#        fin.write(str(b)+'\n')
+with open("./sample_mnist.dat", "w") as fin:
+    fin.write("28 28 1\n")
+    a = X_train_original[4]
+    for b in a:
+        fin.write(str(b)+'\n')
 
 # get prediction on saved sample
 # c++ output should be the same ;)
 print('Prediction on saved sample:')
-print(str(model.predict(X_train[:1])))
+#print(X_train[1:2])
+print(str(model.predict(X_train[4:5])))
 # on my pc I got:
 #[[ 0.03729606  0.00783805  0.06588034  0.21728528  0.01093729  0.34730983
 #   0.01350389  0.02174525  0.26624694  0.01195715]]
