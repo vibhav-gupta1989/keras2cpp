@@ -17,13 +17,13 @@ python cifar-10.py
 ```
 
 ### Step 2: 
-Dump the model to a text file
+Dump the model to a text file. By default, the script uses model and dumps it for mnist dataset. To use and dump model for the cifar-10 dataset, set in the script output to "example/dumped_cifar10.nnet" and argument for load_model to example/my_model_cifar10.keras. 
 ```
 python dump_to_simple_cpp.py
 ```
 
 ### Step 3: 
-Compile the C++ code that has the layers and the test code implementation
+Compile the C++ code that has the layers and the test code implementation. By default, the code uses sample and model for the mnist dataset. To use the sample and model for cifar-10 dataset, specify the right location to the sample file and model in example_main.cc.
 ```
 g++ example_main.cc -o output
 ```
