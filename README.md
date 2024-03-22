@@ -38,7 +38,7 @@ g++ -o example_main example_main.cc -L. -llayers -lfileio
 ```
 
 ### Step 5: 
-Run the executable generated from Step 3. It loads the model and runs the test on the sample image. The output should match the prediction from Step 1.
+Run the executable generated from Step 4. It loads the model and runs the test on the sample image. The output should match the prediction from Step 1.
 ```
 ./example_main
 ```
