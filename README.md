@@ -22,14 +22,23 @@ Dump the model to a text file. By default, the script uses model and dumps it fo
 python dump_to_simple_cpp.py
 ```
 
-### Step 3: 
-Compile the C++ code that has the layers and the test code implementation. By default, the code uses sample and model for the mnist dataset. To use the sample and model for cifar-10 dataset, specify the right location to the sample file and model in example_main.cc.
+### Step 3:
+Compile C++ static libs for layers and fileio
 ```
-g++ example_main.cc -o output
+g++ -c fileio.cc -o fileio.o
+ar rcs libfileio.a fileio.o
+g++ -c layers.cc -o layers.o
+ar rcs liblayers.a layers.o
 ```
 
 ### Step 4: 
+Compile the C++ code that has the test code implementation. By default, the code uses sample and model for the mnist dataset. To use the sample and model for cifar-10 dataset, specify the right location to the sample file and model in example_main.cc.
+```
+g++ -o example_main example_main.cc -L. -llayers -lfileio
+```
+
+### Step 5: 
 Run the executable generated from Step 3. It loads the model and runs the test on the sample image. The output should match the prediction from Step 1.
 ```
-./output
+./example_main
 ```
