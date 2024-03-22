@@ -15,7 +15,7 @@ parser.add_argument('-v', '--verbose', help="Verbose", required=False)
 
 architecture = "example/my_nn_arch.json";
 weights = "example/my_nn_weights.h5";
-output = "example/dumped.nnet";
+output = "example/dumped_mnist.nnet";
 verbose = True;
 
 print('Read architecture from', architecture)
@@ -28,7 +28,7 @@ arch = open(architecture).read()
 # model.load_weights(args.weights)
 # model.compile(loss='categorical_crossentropy', optimizer='adadelta')
 arch = json.loads(arch)
-model = load_model("example/my_model.keras")
+model = load_model("example/my_model_mnist.keras")
 
 with open(output, 'w') as fout:
     fout.write('layers ' + str(len(model.layers)) + '\n')

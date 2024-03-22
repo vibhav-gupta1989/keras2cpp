@@ -78,7 +78,7 @@ model.fit(X_train, Y_train, batch_size=batch_size, epochs=nb_epoch,
 # with open('./my_nn_arch.json', 'w') as fout:
 #     fout.write(model.to_json())
 # model.save_weights('./my_nn_weights.h5', overwrite=True, save_format='h5')
-model.save("my_model.keras")
+model.save("my_model_mnist.keras")
 
 # store one sample in text file
 with open("./sample_mnist.dat", "w") as fin:
