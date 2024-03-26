@@ -9,8 +9,8 @@ int main() {
 
   DataChunk *sample = new DataChunk2D();
   sample->read_from_file("./example/sample_mnist.dat");
-  std::cout << sample->get_3d().size() << std::endl;
-  KerasModel m("./example/dumped_mnist.nnet", true);
+  //std::cout << sample->get_3d().size() << std::endl;
+  KerasModel m("./example/dumped_mnist.nnet", false);
   m.compute_output(sample);
   delete sample;
 

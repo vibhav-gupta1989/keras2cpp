@@ -42,3 +42,42 @@ Run the executable generated from Step 4. It loads the model and runs the test o
 ```
 ./example_main
 ```
+The output looks like below:-
+```
+This is simple example with Keras neural network model loading into C++.
+Keras model will be used in C++ for prediction only.
+Processing layer Conv2D
+Conv2D layer succeeded
+Time taken is 3684 microseconds
+Processing layer Activation
+Activation layer succeeded
+Time taken is 2294 microseconds
+Processing layer Conv2D
+Conv2D layer succeeded
+Time taken is 6663 microseconds
+Processing layer Activation
+Activation layer succeeded
+Time taken is 1836 microseconds
+Processing layer MaxPooling2D
+MaxPooling2D layer succeeded
+Time taken is 1151 microseconds
+Processing layer Flatten
+Flatten layer succeeded
+Time taken is 158 microseconds
+Processing layer Dense
+Dense layer succeeded
+Time taken is 380 microseconds
+Processing layer Activation
+Activation layer succeeded
+Time taken is 123 microseconds
+Processing layer Dense
+Dense layer succeeded
+Time taken is 240 microseconds
+Processing layer Activation
+Activation layer succeeded
+Time taken is 600 microseconds
+
+Prediction Output:
+DataChunkFlat values:
+0.0826641 0.0772677 0.0815491 0.0955249 0.0985643 0.119052 0.109999 0.124131 0.108191 0.103057
+```

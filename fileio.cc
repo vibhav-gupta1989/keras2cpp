@@ -40,8 +40,8 @@ void load_weights_conv2d(ifstream &fin, int& m_rows, int& m_cols, int& m_depth,
     fin >> m_rows >> m_cols >> m_depth >> m_kernels_cnt >>  m_border_mode;
     if (m_border_mode == "[") { m_border_mode = "valid"; skip = true; }
 
-    cout << "LayerConv2D " << m_kernels_cnt << "x" << m_depth << "x" << m_rows <<
-              "x" << m_cols << " border_mode " << m_border_mode << endl;
+    //cout << "LayerConv2D " << m_kernels_cnt << "x" << m_depth << "x" << m_rows <<
+    //          "x" << m_cols << " border_mode " << m_border_mode << endl;
     // reading kernel weights
 
     for(int i=0; i<m_rows; i++){
@@ -67,7 +67,7 @@ void load_weights_conv2d(ifstream &fin, int& m_rows, int& m_cols, int& m_depth,
     fin >> tmp_char; // for '['
     for(int k = 0; k < m_kernels_cnt; ++k) {
         fin >> tmp_float;
-        cout << tmp_float << endl;
+        //cout << tmp_float << endl;
         m_bias.push_back(tmp_float);
     }
     fin >> tmp_char; // for ']'
@@ -76,13 +76,13 @@ void load_weights_conv2d(ifstream &fin, int& m_rows, int& m_cols, int& m_depth,
 
 void load_weights_activation(std::ifstream& fin, std::string& m_activation_type){
     fin >> m_activation_type;
-    cout << "Activation type " << m_activation_type << endl;
+    //cout << "Activation type " << m_activation_type << endl;
 
 }
 
 void load_weights_max_pooling(std::ifstream& fin, int& m_pool_x, int& m_pool_y){
     fin >> m_pool_x >> m_pool_y;
-    cout << "MaxPooling " << m_pool_x << "x" << m_pool_y << endl;
+    //cout << "MaxPooling " << m_pool_x << "x" << m_pool_y << endl;
 }
 
 void load_weights_dense(std::ifstream& fin, int& m_input_cnt, int& m_neurons, 
@@ -101,14 +101,14 @@ void load_weights_dense(std::ifstream& fin, int& m_input_cnt, int& m_neurons,
         fin >> tmp_char; // for ']'
         m_weights.push_back(tmp_n);
     }
-    cout << "weights " << m_weights.size() << endl;
+    //cout << "weights " << m_weights.size() << endl;
     fin >> tmp_char; // for '['
     for(int n = 0; n < m_neurons; ++n) {
         fin >> tmp_float;
         m_bias.push_back(tmp_float);
     }
     fin >> tmp_char; // for ']'
-    cout << "bias " << m_bias.size() << endl;
+    //cout << "bias " << m_bias.size() << endl;
 
 }
 
