@@ -1,7 +1,7 @@
 # Run Instructions
 
 ### Step 1: 
-Create and train a model in Python on the mnist dataset, save a sample image and run the prediction on a sample image.
+Create and train a model in Python on the mnist dataset, save a sample image and run the prediction on the sample image.
 ```
 cd example
 python mnist_cnn_one_iteration.py
@@ -10,7 +10,7 @@ python mnist_cnn_one_iteration.py
 OR
 
 
-Create and train a model in Python on the CIFAR 10 dataset, save a sample image and run the prediction on a sample image.
+Create and train a model in Python on the CIFAR 10 dataset, save a sample image and run the prediction on the sample image.
 ```
 cd example
 python cifar-10.py
