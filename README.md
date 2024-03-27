@@ -22,7 +22,17 @@ Dump the model to a text file. By default, the script uses model and dumps it fo
 python dump_to_simple_cpp.py
 ```
 
-### Step 3:
+### Step 3
+If you want to build with cmake, install cmake and Visual Studio on your system. Create a folder named "build" in the root directory. Then run the following command
+```
+cmake -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Debug
+```
+
+Then open All_BUILD.vcxproj in Visual Studio. Right click on ALL_BUILD in the Solution Explorer and click "Build". This will build the static libs and the app.
+
+Then go directly to Step 6.
+
+### Step 4:
 Compile C++ static libs for layers and fileio
 ```
 g++ -c fileio.cc -o fileio.o
@@ -31,13 +41,13 @@ g++ -c layers.cc -o layers.o
 ar rcs liblayers.a layers.o
 ```
 
-### Step 4: 
+### Step 5: 
 Compile the C++ code that has the test code implementation. By default, the code uses sample and model for the mnist dataset. To use the sample and model for cifar-10 dataset, specify the right location to the sample file and model in example_main.cc.
 ```
 g++ -o example_main example_main.cc -L. -llayers -lfileio
 ```
 
-### Step 5: 
+### Step 6: 
 Run the executable generated from Step 4. It loads the model and runs the test on the sample image. The output should match the prediction from Step 1.
 ```
 ./example_main
