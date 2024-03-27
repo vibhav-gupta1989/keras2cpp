@@ -27,7 +27,7 @@ If you want to build with cmake, install cmake and Visual Studio on your system.
 
 Create a folder named "build" in the root directory. Then run the following command
 ```
-cmake -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Debug
+cmake -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Debug/Release
 ```
 
 Then open All_BUILD.vcxproj in Visual Studio. Right click on ALL_BUILD in the Solution Explorer and click "Build". This will build the static libs and the app.
