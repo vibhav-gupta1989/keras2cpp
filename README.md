@@ -23,7 +23,9 @@ python dump_to_simple_cpp.py
 ```
 
 ### Step 3
-If you want to build with cmake, install cmake and Visual Studio on your system. Create a folder named "build" in the root directory. Then run the following command
+If you want to build with cmake, install cmake and Visual Studio on your system. If you want to build components independently, go to Step 4.
+
+Create a folder named "build" in the root directory. Then run the following command
 ```
 cmake -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Debug
 ```
